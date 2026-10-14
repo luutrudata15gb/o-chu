@@ -18,7 +18,7 @@
             color: #4a4a4a;
             position: relative;
             z-index: 1;
-            overflow: hidden; /* Ngăn cuộn toàn trang */
+            overflow-x: hidden; /* Điện thoại: cho cuộn dọc; máy tính khóa cuộn ở media query bên dưới */
         }
 
         body::before {
@@ -82,6 +82,8 @@
             pointer-events: none; /* Không cản trở click */
         }
 
+        @media (min-width: 768px) { body { overflow: hidden; } }
+
         /* Tối ưu in 1 trang A4 ngang */
         @media print {
             @page { size: A4 landscape; margin: 5mm; }
@@ -110,15 +112,15 @@
     </style>
 </head>
 
-<body class="h-screen w-screen p-2 md:p-4 flex flex-col items-center justify-center overflow-hidden">
+<body class="min-h-screen w-full p-2 md:p-4 md:h-screen md:w-screen flex flex-col items-center md:justify-center md:overflow-hidden">
 
-    <div class="w-full h-full max-w-7xl bg-white/90 backdrop-blur-md rounded-[2rem] shadow-2xl p-4 md:p-6 flex flex-col print-container border-4 border-white relative z-10">
+    <div class="w-full md:h-full max-w-7xl bg-white/90 backdrop-blur-md rounded-[1.5rem] md:rounded-[2rem] shadow-2xl p-3 md:p-6 flex flex-col print-container border-4 border-white relative z-10">
         
         <!-- Nội dung chính 2 Cột -->
-        <div class="flex-grow flex flex-col md:flex-row gap-5 page-break min-h-0 relative h-full">
+        <div class="flex-grow flex flex-col md:flex-row gap-5 page-break min-h-0 relative md:h-full">
             
             <!-- Cột trái: Gợi ý -->
-            <div class="w-full md:w-[45%] flex flex-col bg-pink-50/60 rounded-3xl pt-8 pb-4 px-4 border-2 border-dashed border-pink-300 relative shadow-inner h-full justify-center">
+            <div class="w-full md:w-[45%] flex flex-col bg-pink-50/60 rounded-3xl pt-8 pb-4 px-4 border-2 border-dashed border-pink-300 relative shadow-inner md:h-full justify-center min-h-[200px] md:min-h-0">
                 <div class="absolute -top-4 left-6 bg-pink-400 px-5 py-1.5 rounded-full text-sm font-black text-white flex items-center gap-2 shadow-md border-2 border-white z-20">
                     <i class="fa-solid fa-list-check"></i> GỢI Ý HÀNG NGANG
                 </div>
@@ -134,13 +136,13 @@
                     </div>
                 </div>
 
-                <div id="questions-container" class="flex flex-col w-full h-full justify-evenly relative">
+                <div id="questions-container" class="flex flex-col w-full md:h-full justify-evenly gap-2 md:gap-0 relative">
                     <!-- Câu hỏi render bằng JS -->
                 </div>
             </div>
 
             <!-- Cột phải: Bảng ô chữ -->
-            <div class="w-full md:w-[55%] flex flex-col bg-white rounded-3xl p-4 border-2 border-pink-100 shadow-sm relative h-full">
+            <div class="w-full md:w-[55%] flex flex-col bg-white rounded-3xl p-3 md:p-4 border-2 border-pink-100 shadow-sm relative md:h-full">
                 
                 <!-- Đồng hồ bấm giờ -->
                 <div class="absolute top-4 right-4 z-20 flex items-center justify-end gap-3 font-bold no-print">
@@ -151,7 +153,7 @@
                 </div>
 
                 <!-- Lưới ô chữ -->
-                <div class="flex-grow w-full relative flex flex-col items-center justify-start pt-8 pb-2">
+                <div class="flex-grow w-full relative flex flex-col items-center justify-start pt-14 md:pt-8 pb-2">
                     <div id="crossword-grid" class="flex flex-col items-center w-full transition-all duration-300">
                         <!-- Lưới render bằng JS -->
                     </div>
@@ -173,23 +175,23 @@
         </div>
 
         <!-- Các Nút Bấm -->
-        <div class="flex flex-wrap justify-center gap-3 mt-4 flex-shrink-0 no-print w-full">
-            <button id="btn-start" onclick="startGame()" class="bg-blue-500 hover:bg-blue-600 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#2563eb] active:shadow-none active:translate-y-[5px] transition-all flex items-center gap-2 text-sm md:text-base">
+        <div class="grid grid-cols-2 md:flex md:flex-wrap md:justify-center gap-3 mt-4 pb-2 flex-shrink-0 no-print w-full">
+            <button id="btn-start" onclick="startGame()" class="col-span-2 md:col-span-1 bg-blue-500 hover:bg-blue-600 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#2563eb] active:shadow-none active:translate-y-[5px] transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                 <i class="fa-solid fa-play"></i> BẮT ĐẦU
             </button>
-            <button id="btn-submit" onclick="checkFinalAnswer()" class="hidden bg-emerald-400 hover:bg-emerald-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#059669] active:shadow-none active:translate-y-[5px] transition-all items-center gap-2 text-sm md:text-base">
+            <button id="btn-submit" onclick="checkFinalAnswer()" class="hidden col-span-2 md:col-span-1 bg-emerald-400 hover:bg-emerald-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#059669] active:shadow-none active:translate-y-[5px] transition-all items-center gap-2 text-sm md:text-base">
                 <i class="fa-solid fa-circle-check"></i> NỘP BÀI
             </button>
-            <button onclick="window.print()" class="bg-purple-400 hover:bg-purple-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#9333ea] active:shadow-none active:translate-y-[5px] transition-all flex items-center gap-2 text-sm md:text-base">
+            <button onclick="window.print()" class="bg-purple-400 hover:bg-purple-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#9333ea] active:shadow-none active:translate-y-[5px] transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                 <i class="fa-solid fa-print"></i> IN PHIẾU
             </button>
-            <button onclick="resetGame()" class="bg-slate-400 hover:bg-slate-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#475569] active:shadow-none active:translate-y-[5px] transition-all flex items-center gap-2 text-sm md:text-base">
+            <button onclick="resetGame()" class="bg-slate-400 hover:bg-slate-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#475569] active:shadow-none active:translate-y-[5px] transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                 <i class="fa-solid fa-rotate-right"></i> LÀM LẠI
             </button>
-            <button onclick="openSetupModal()" class="bg-indigo-400 hover:bg-indigo-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#4f46e5] active:shadow-none active:translate-y-[5px] transition-all flex items-center gap-2 text-sm md:text-base">
+            <button onclick="openSetupModal()" class="bg-indigo-400 hover:bg-indigo-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#4f46e5] active:shadow-none active:translate-y-[5px] transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                 <i class="fa-solid fa-pen-to-square"></i> TẠO Ô CHỮ
             </button>
-            <button onclick="openLibraryModal()" class="bg-orange-400 hover:bg-orange-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#ea580c] active:shadow-none active:translate-y-[5px] transition-all flex items-center gap-2 text-sm md:text-base">
+            <button onclick="openLibraryModal()" class="bg-orange-400 hover:bg-orange-500 text-white font-black py-2 px-6 rounded-2xl shadow-[0_5px_0_#ea580c] active:shadow-none active:translate-y-[5px] transition-all flex items-center justify-center gap-2 text-sm md:text-base">
                 <i class="fa-solid fa-folder-open"></i> THƯ VIỆN
             </button>
         </div>
@@ -207,7 +209,7 @@
 
     <!-- Modal Tạo Ô Chữ -->
     <div id="setup-modal" class="fixed inset-0 bg-pink-900/60 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300 py-4">
-        <div class="bg-white rounded-[2rem] p-6 max-w-4xl w-full mx-auto shadow-2xl transform scale-95 transition-transform duration-300 border-4 border-pink-100 flex flex-col max-h-[90vh]">
+        <div class="bg-white rounded-[2rem] p-4 md:p-6 max-w-4xl w-[calc(100%-1rem)] md:w-full mx-auto shadow-2xl transform scale-95 transition-transform duration-300 border-4 border-pink-100 flex flex-col" style="max-height:92vh;max-height:92dvh">
             <h2 class="text-xl font-black mb-3 text-pink-600 uppercase border-b-2 border-dashed border-pink-200 pb-2 flex-shrink-0"><i class="fa-solid fa-cogs"></i> Tạo Ô Chữ Mới</h2>
             
             <!-- Phần nhập Tên Bài và Khối Lớp -->
@@ -236,7 +238,7 @@
                 - <strong>Vị trí ô vàng:</strong> Nhập số thứ tự chữ cái (1, 2, 3...) để làm Từ Khóa Bí Ẩn.
             </div>
             <div id="setup-rows-container" class="flex-grow flex flex-col gap-3 overflow-y-auto p-2 border-2 border-dashed border-gray-200 rounded-xl bg-gray-50"></div>
-            <div class="mt-4 flex justify-between items-center gap-3 flex-shrink-0">
+            <div class="mt-4 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
                 <button onclick="addSetupRow()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-5 rounded-xl shadow-sm"><i class="fa-solid fa-plus"></i> Thêm câu hỏi</button>
                 <div class="flex gap-2">
                     <button onclick="closeSetupModal()" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-xl">Hủy</button>
@@ -248,7 +250,7 @@
 
     <!-- Modal Thư Viện -->
     <div id="library-modal" class="fixed inset-0 bg-orange-900/40 hidden items-center justify-center z-50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-[2rem] p-6 max-w-lg w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300 border-4 border-orange-100 flex flex-col max-h-[80vh]">
+        <div class="bg-white rounded-[2rem] p-4 md:p-6 max-w-lg w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300 border-4 border-orange-100 flex flex-col" style="max-height:88vh;max-height:88dvh">
             <div class="flex justify-between items-center mb-4 border-b-2 border-dashed border-orange-200 pb-2">
                 <h2 class="text-2xl font-black text-orange-600 uppercase tracking-wide"><i class="fa-solid fa-folder-open"></i> Thư Viện</h2>
                 <button onclick="closeLibraryModal()" class="text-gray-400 hover:text-red-500 text-2xl"><i class="fa-solid fa-xmark"></i></button>
@@ -458,16 +460,27 @@
 
             const inputCursorClass = isGameStarted ? 'cursor-text bg-white' : 'cursor-not-allowed opacity-40 bg-gray-200';
 
+            // Điện thoại: tính cỡ ô theo bề ngang khả dụng để cả hàng vừa màn hình
+            const isMobile = window.innerWidth < 768;
+            let mobilePx = 0;
+            if (isMobile) {
+                const avail = (container.clientWidth || (window.innerWidth - 60)) - 26;
+                mobilePx = Math.floor((avail - 4 * (maxColumns - 1)) / maxColumns);
+                mobilePx = Math.max(18, Math.min(46, mobilePx));
+            }
+
             gameData.forEach((rowObj, rowIdx) => {
                 const rowDiv = document.createElement('div');
                 rowDiv.id = `row-${rowIdx}`; 
                 // Bỏ w-full để cụm row ôm sát content, gridWrapper sẽ lo việc căn giữa
                 rowDiv.className = `flex justify-start transition-all duration-300 ${gapClass}`;
+                if (mobilePx) { rowDiv.style.gap = '4px'; rowDiv.style.marginBottom = '5px'; }
                 
                 const emptyBoxesBefore = maxYellowIdx - rowObj.yellowIdx;
                 for (let i = 0; i < emptyBoxesBefore; i++) {
                     const spacer = document.createElement('div');
                     spacer.className = `${boxSizeClass} flex-shrink-0`;
+                    if (mobilePx) { spacer.style.width = mobilePx + 'px'; spacer.style.height = mobilePx + 'px'; }
                     rowDiv.appendChild(spacer);
                 }
 
@@ -485,8 +498,19 @@
                     if (isYellow && !isGameStarted) { baseClasses += ' opacity-50 cursor-not-allowed'; }
 
                     input.className = baseClasses;
+                    if (mobilePx) {
+                        input.style.width = mobilePx + 'px';
+                        input.style.height = mobilePx + 'px';
+                        input.style.fontSize = Math.max(11, Math.round(mobilePx * 0.62)) + 'px';
+                        input.style.padding = '0';
+                        input.style.borderRadius = '8px';
+                    }
                     if (!isGameStarted) input.disabled = true;
 
+                    input.setAttribute('autocomplete', 'off');
+                    input.setAttribute('autocapitalize', 'characters');
+                    input.setAttribute('autocorrect', 'off');
+                    input.spellcheck = false;
                     input.dataset.r = rowIdx;
                     input.dataset.c = colIdx;
                     input.value = gridState[rowIdx][colIdx];
@@ -500,6 +524,10 @@
                         const numLabel = document.createElement('span');
                         numLabel.innerText = rowIdx + 1;
                         numLabel.className = `absolute top-1/2 transform -translate-y-1/2 font-black text-pink-500 bg-pink-100 rounded-full flex items-center justify-center border border-pink-200 shadow-sm z-10 num-label ${numSize}`;
+                        if (mobilePx) {
+                            numLabel.style.width = '16px'; numLabel.style.height = '16px';
+                            numLabel.style.fontSize = '9px'; numLabel.style.left = '-19px';
+                        }
                         cellWrapper.appendChild(numLabel);
                         cellWrapper.appendChild(input);
                         rowDiv.appendChild(cellWrapper);
@@ -510,6 +538,14 @@
                 gridWrapper.appendChild(rowDiv);
             });
             // Nạp toàn bộ khối ô chữ vào khung giữa
+            if (mobilePx) {
+                gridWrapper.style.paddingLeft = '22px';
+                container.style.overflowX = 'auto';
+                container.style.alignItems = 'safe center';
+            } else {
+                container.style.overflowX = '';
+                container.style.alignItems = '';
+            }
             container.appendChild(gridWrapper);
         }
 
@@ -570,6 +606,13 @@
 
             const inputCursorClass = isGameStarted ? 'cursor-text bg-yellow-50' : 'cursor-not-allowed opacity-40 bg-gray-200 border-gray-300 text-transparent';
 
+            let slotPx = 0;
+            if (window.innerWidth < 768) {
+                const w = slotsContainer.clientWidth || (window.innerWidth - 80);
+                const n = Math.max(1, SECRET_WORD.length);
+                slotPx = Math.max(28, Math.min(44, Math.floor((w - 6 * (n - 1)) / n)));
+            }
+
             for (let i = 0; i < SECRET_WORD.length; i++) {
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -578,6 +621,16 @@
                 
                 if (!isGameStarted) input.disabled = true;
 
+                input.setAttribute('autocomplete', 'off');
+                input.setAttribute('autocapitalize', 'characters');
+                input.setAttribute('autocorrect', 'off');
+                input.spellcheck = false;
+                if (slotPx) {
+                    input.style.width = slotPx + 'px';
+                    input.style.height = slotPx + 'px';
+                    input.style.fontSize = Math.max(16, Math.round(slotPx * 0.55)) + 'px';
+                    input.style.padding = '0';
+                }
                 input.dataset.slot = i;
                 input.value = slotState[i];
 
@@ -970,6 +1023,15 @@
             event.target.value = ''; // Reset input để có thể chọn lại cùng 1 file
         }
 
+        // Vẽ lại bảng khi đổi bề ngang (xoay điện thoại). Bỏ qua thay đổi chiều cao do bàn phím ảo.
+        let lastViewportW = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (Math.abs(window.innerWidth - lastViewportW) > 30) {
+                lastViewportW = window.innerWidth;
+                if (gameData.length) { renderGrid(); renderSecretSlots(); }
+            }
+        });
+
         // Tải dữ liệu từ LocalStorage khi khởi động trang
         window.onload = function() {
             const localData = localStorage.getItem('crossword_offline_lib');
@@ -995,7 +1057,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, signOut, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ============================================================
@@ -1095,6 +1157,7 @@
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
+                getRedirectResult(auth).catch(() => {});
 
                 if (usePlatformAuth) {
                     // Chạy trên nền tảng có sẵn Firebase: đăng nhập ngầm như bản gốc
